@@ -2,7 +2,6 @@ package com.elrast.tron;
 
 import android.content.Context;
 import android.content.res.Resources;
-import android.database.DataSetObserver;
 import android.graphics.Color;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -18,8 +17,7 @@ import java.util.List;
  * Created by Iman on 24/01/16.
  */
 public class ImageAdapter extends BaseAdapter {
-    List<Integer> selectedPixelsByComputer;
-    List<Integer> selectedPixelsByPlayer;
+    List<Integer> updatedPixels;
 
     public interface OnImageBackGroundChanged {
         public void backgroundChanged(ImageView imageView);
@@ -34,8 +32,7 @@ public class ImageAdapter extends BaseAdapter {
     }
 
     public int getCount() {
-        return 324;
-//        return mThumbIds.length;
+        return 400;
     }
 
     public Object getItem(int position) {
@@ -45,7 +42,7 @@ public class ImageAdapter extends BaseAdapter {
 
     public long getItemId(int position) {
 
-        return position + 0;
+        return position;
     }
 
     // create a new ImageView for each item referenced by the Adapter
@@ -65,8 +62,8 @@ public class ImageAdapter extends BaseAdapter {
             int y = parent.getHeight();
             int z = parent.getWidth();
 
-            float my = 17 * (metrics.densityDpi / 160f);
-            imageView.setLayoutParams(new GridView.LayoutParams((parentWidth - Math.round(my) ) / 18 , (parentWidth - Math.round(my)) / 18));
+            float my = 19 * (metrics.densityDpi / 160f);
+            imageView.setLayoutParams(new GridView.LayoutParams((parentWidth - Math.round(my) ) / 20 , (parentWidth - Math.round(my)) / 20));
 
             imageView.setContentDescription("De");
             imageView.setBackgroundColor(Color.BLUE);
@@ -78,29 +75,26 @@ public class ImageAdapter extends BaseAdapter {
             imageView.setBackgroundColor(Color.BLUE);
 
         }
-//        if(selectedPixelsByComputer != null && selectedPixelsByComputer.contains(position)){
-//            imageView.setBackgroundColor(Color.RED);
-//        }
-        if(selectedPixelsByComputer != null){
-            switch (Math.round(selectedPixelsByComputer.get(Math.round(getItemId(position))))){
+        if(updatedPixels != null){
+            int color = 0;
+            switch (updatedPixels.get(position)){
                 case 1:
-                    imageView.setBackgroundColor(Color.RED);
+                    color = Color.GREEN;
                     break;
                 case 2:
-                    imageView.setBackgroundColor(Color.GREEN);
+                    color = Color.RED;
                     break;
                 case 3:
-                    imageView.setBackgroundColor(Color.BLUE);
+                    color = Color.BLUE;
+                    break;
+                default:
+                    color = Color.BLACK;
                     break;
             }
+            imageView.setBackgroundColor(color);
         }
 
         return imageView;
     }
 
-    @Override
-    public void registerDataSetObserver(DataSetObserver observer) {
-        Log.e("..............","This is Observer");
-        super.registerDataSetObserver(observer);
-    }
 }

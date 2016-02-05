@@ -12,7 +12,7 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.Toast;
 
-import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -72,30 +72,24 @@ public class MainFragment extends Fragment {
 
 
         gridView.post(new Runnable() {
-            int i = 117;
+//            int i = 117;
+            Grid grid = new Grid();
+            List<Integer> pixels = grid.getPixelList();
+            ComputerPlayer computerPlayer = new ComputerPlayer(pixels);
 
             @Override
             public void run() {
-                //int x = gridView.getHeight(); //height is ready
-                //ImageAdapter imageAdapter =(ImageAdapter) gridView.getAdapter();
-//                ImageView imageView = (ImageView)imageAdapter.getItem(18);
-                if(imageAdapter.selectedPixelsByComputer == null){
-                    imageAdapter.selectedPixelsByComputer = new ArrayList<>();
+                if(imageAdapter.updatedPixels == null){
+                    imageAdapter.updatedPixels = pixels;
                 }
-                imageAdapter.selectedPixelsByComputer.add(i++);
-//                imageView.notifyAll();
-//                gridView.setAdapter(imageAdapter);
+//                imageAdapter.updatedPixels.add(i++);
 
-                Grid grid = new Grid();
-                imageAdapter.selectedPixelsByComputer = grid.getPixelList();
-
+                computerPlayer.move();
+                imageAdapter.updatedPixels = pixels;
+//                ComputerPlayer computerPlayer = new ComputerPlayer()
 
                 imageAdapter.notifyDataSetChanged();
-
-
-
-                gridView.postDelayed(this,1000);
-
+                gridView.postDelayed(this,100);
             }
 
         });
