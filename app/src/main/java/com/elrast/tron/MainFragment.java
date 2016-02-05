@@ -12,6 +12,8 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.Toast;
 
+import com.elrast.tron.enums.Direction;
+
 import java.util.List;
 
 
@@ -23,6 +25,11 @@ public class MainFragment extends Fragment {
     Context context;
     GridView gridView;
     private ImageAdapter imageAdapter;
+    private boolean collision;
+
+
+    private Direction direction = Direction.UP;
+
     public MainFragment() {
         // Required empty public constructor
     }
@@ -33,7 +40,7 @@ public class MainFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_main, container, false);
-         this.gridView = (GridView) view.findViewById(R.id.gridview);
+        this.gridView = (GridView) view.findViewById(R.id.gridview);
         gridView.setBackgroundColor(Color.BLACK);
         int y = gridView.getHeight();
         this.imageAdapter = new ImageAdapter(context);
@@ -70,31 +77,44 @@ public class MainFragment extends Fragment {
     public void onResume() {
         super.onResume();
 
-
         gridView.post(new Runnable() {
-//            int i = 117;
+            //            int i = 117;
             Grid grid = new Grid();
-            List<Integer> pixels = grid.getPixelList();
-            ComputerPlayer computerPlayer = new ComputerPlayer(pixels);
+            List<Integer> gridPixelList = grid.getPixelList();
+            ComputerPlayer computerPlayer = new ComputerPlayer(gridPixelList);
+            HumanPlayer humanPlayer = new HumanPlayer(gridPixelList);
 
             @Override
             public void run() {
-                if(imageAdapter.updatedPixels == null){
-                    imageAdapter.updatedPixels = pixels;
+                if (imageAdapter.gridsStatusNumbers == null) {
+                    imageAdapter.gridsStatusNumbers = gridPixelList;
                 }
-//                imageAdapter.updatedPixels.add(i++);
-
-                computerPlayer.move();
-                imageAdapter.updatedPixels = pixels;
-//                ComputerPlayer computerPlayer = new ComputerPlayer()
-
+                //computerPlayer.move();
+                try {
+                    computerPlayer.move();
+//                    humanPlayer.move(direction);
+                } catch (CollisionException e) {
+                    Toast toast = Toast.makeText(context, e.getMessage(), Toast.LENGTH_LONG);
+                    toast.show();
+                    collision = true;
+                }
+                imageAdapter.gridsStatusNumbers = gridPixelList;
                 imageAdapter.notifyDataSetChanged();
-                gridView.postDelayed(this,100);
+                if (collision) {
+                   // return;
+                }
+                gridView.postDelayed(this, 100);
             }
 
         });
 
+    }
 
+    public Direction getDirection() {
+        return direction;
+    }
 
+    public void setDirection(Direction direction) {
+        this.direction = direction;
     }
 }

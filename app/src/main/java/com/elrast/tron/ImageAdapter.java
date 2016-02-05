@@ -17,11 +17,12 @@ import java.util.List;
  * Created by Iman on 24/01/16.
  */
 public class ImageAdapter extends BaseAdapter {
-    List<Integer> updatedPixels;
+    List<Integer> gridsStatusNumbers;
 
     public interface OnImageBackGroundChanged {
         public void backgroundChanged(ImageView imageView);
     }
+
     public OnImageBackGroundChanged onImageBackGroundChanged;
     private Context context;
     private View convertView;
@@ -37,7 +38,7 @@ public class ImageAdapter extends BaseAdapter {
 
     public Object getItem(int position) {
 
-        return getView(position,convertView,parent);
+        return getView(position, convertView, parent);
     }
 
     public long getItemId(int position) {
@@ -63,21 +64,21 @@ public class ImageAdapter extends BaseAdapter {
             int z = parent.getWidth();
 
             float my = 19 * (metrics.densityDpi / 160f);
-            imageView.setLayoutParams(new GridView.LayoutParams((parentWidth - Math.round(my) ) / 20 , (parentWidth - Math.round(my)) / 20));
+            imageView.setLayoutParams(new GridView.LayoutParams((parentWidth - Math.round(my)) / 20, (parentWidth - Math.round(my)) / 20));
 
             imageView.setContentDescription("De");
             imageView.setBackgroundColor(Color.BLUE);
 
         } else {
             imageView = (ImageView) convertView;
-            this.convertView = (ImageView)convertView;
+            this.convertView = (ImageView) convertView;
             this.parent = parent;
             imageView.setBackgroundColor(Color.BLUE);
 
         }
-        if(updatedPixels != null){
+        if (gridsStatusNumbers != null) {
             int color = 0;
-            switch (updatedPixels.get(position)){
+            switch (gridsStatusNumbers.get(position)) {
                 case 1:
                     color = Color.GREEN;
                     break;
@@ -86,6 +87,9 @@ public class ImageAdapter extends BaseAdapter {
                     break;
                 case 3:
                     color = Color.BLUE;
+                    break;
+                case 4:
+                    color = Color.YELLOW;
                     break;
                 default:
                     color = Color.BLACK;
