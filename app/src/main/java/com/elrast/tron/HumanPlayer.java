@@ -2,6 +2,7 @@ package com.elrast.tron;
 
 import com.elrast.tron.enums.Direction;
 import com.elrast.tron.enums.PixelColor;
+import com.elrast.tron.exceptions.CollisionException;
 
 import java.util.List;
 

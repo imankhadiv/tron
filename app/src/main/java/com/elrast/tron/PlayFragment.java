@@ -1,10 +1,10 @@
 package com.elrast.tron;
 
 
+import android.app.Fragment;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +13,7 @@ import android.widget.GridView;
 import android.widget.Toast;
 
 import com.elrast.tron.enums.Direction;
+import com.elrast.tron.exceptions.CollisionException;
 
 import java.util.List;
 
@@ -20,17 +21,22 @@ import java.util.List;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class MainFragment extends Fragment {
+public class PlayFragment extends Fragment {
+    interface CounterListener {
+        public void increment();
+    }
 
     Context context;
     GridView gridView;
     private ImageAdapter imageAdapter;
     private boolean collision;
-
-
+    private boolean shouldStart;
+    private long delay = 1000;
     private Direction direction = Direction.UP;
+    private CounterListener counterListener;
 
-    public MainFragment() {
+
+    public PlayFragment() {
         // Required empty public constructor
     }
 
@@ -39,21 +45,13 @@ public class MainFragment extends Fragment {
     public View onCreateView(final LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_main, container, false);
+        View view = inflater.inflate(R.layout.fragment_play, container, false);
+        this.context = inflater.getContext();
         this.gridView = (GridView) view.findViewById(R.id.gridview);
         gridView.setBackgroundColor(Color.BLACK);
         int y = gridView.getHeight();
         this.imageAdapter = new ImageAdapter(context);
         gridView.setAdapter(imageAdapter);
-//        gridView.post(new Runnable() {
-//            final GridView gridView1 = gridView;
-//            @Override
-//
-//            public void run() {
-//                gridView1.setBackgroundColor(Color.BLACK);
-//                gridView1.setAdapter(new ImageAdapter(context));
-//            }
-//        });
 
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v,
@@ -71,6 +69,10 @@ public class MainFragment extends Fragment {
     public void onAttach(Context context) {
         super.onAttach(context);
         this.context = context;
+        if(context instanceof PlayActivity) {
+            setCounterListener((PlayActivity)context);
+
+        }
     }
 
     @Override
@@ -78,7 +80,7 @@ public class MainFragment extends Fragment {
         super.onResume();
 
         gridView.post(new Runnable() {
-            //            int i = 117;
+
             Grid grid = new Grid();
             List<Integer> gridPixelList = grid.getPixelList();
             ComputerPlayer computerPlayer = new ComputerPlayer(gridPixelList);
@@ -86,24 +88,29 @@ public class MainFragment extends Fragment {
 
             @Override
             public void run() {
+
                 if (imageAdapter.gridsStatusNumbers == null) {
                     imageAdapter.gridsStatusNumbers = gridPixelList;
                 }
-                //computerPlayer.move();
-                try {
-                    computerPlayer.move();
-//                    humanPlayer.move(direction);
-                } catch (CollisionException e) {
-                    Toast toast = Toast.makeText(context, e.getMessage(), Toast.LENGTH_LONG);
-                    toast.show();
-                    collision = true;
+                if (shouldStart) {
+                    try {
+                        computerPlayer.move();
+                        humanPlayer.move(direction);
+                        counterListener.increment();
+
+                    } catch (CollisionException e) {
+                        Toast toast = Toast.makeText(context, e.getMessage(), Toast.LENGTH_LONG);
+                        toast.show();
+                        collision = true;
+                    }
                 }
+
                 imageAdapter.gridsStatusNumbers = gridPixelList;
                 imageAdapter.notifyDataSetChanged();
                 if (collision) {
-                   // return;
+                    return;
                 }
-                gridView.postDelayed(this, 100);
+                gridView.postDelayed(this, delay);
             }
 
         });
@@ -117,4 +124,19 @@ public class MainFragment extends Fragment {
     public void setDirection(Direction direction) {
         this.direction = direction;
     }
+
+    public void setShouldStart(boolean shouldStart) {
+        this.shouldStart = shouldStart;
+    }
+
+    public void setCounterListener(CounterListener counterListener) {
+        this.counterListener = counterListener;
+    }
+
+    public void setDelay(long delay) {
+        this.delay = delay;
+    }
+
+
+
 }

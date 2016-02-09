@@ -1,4 +1,4 @@
-package com.elrast.tron;
+package com.elrast.tron.exceptions;
 
 /**
  * Created by Iman on 05/02/16.

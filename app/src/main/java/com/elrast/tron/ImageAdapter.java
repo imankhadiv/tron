@@ -17,13 +17,8 @@ import java.util.List;
  * Created by Iman on 24/01/16.
  */
 public class ImageAdapter extends BaseAdapter {
+
     List<Integer> gridsStatusNumbers;
-
-    public interface OnImageBackGroundChanged {
-        public void backgroundChanged(ImageView imageView);
-    }
-
-    public OnImageBackGroundChanged onImageBackGroundChanged;
     private Context context;
     private View convertView;
     private ViewGroup parent;

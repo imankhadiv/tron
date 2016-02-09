@@ -3,6 +3,7 @@ package com.elrast.tron;
 import android.util.Log;
 
 import com.elrast.tron.enums.PixelColor;
+import com.elrast.tron.exceptions.CollisionException;
 
 import java.util.ArrayList;
 import java.util.List;
