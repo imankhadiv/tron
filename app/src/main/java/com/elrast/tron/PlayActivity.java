@@ -9,19 +9,25 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.elrast.tron.enums.Direction;
+import com.elrast.tron.enums.Speed;
 
 public class PlayActivity extends Activity implements PlayFragment.CounterListener {
     public static final String RESUME = "Resume";
     public static final String PAUSE = "Pause";
+    private static final String EASY = "Easy";
+    private static final String MEDIUM = "Medium";
+    private static final String DIFFICULT = "Difficult";
     PlayFragment playFragment;
     private int counter;
-
+    private String difficulty = "Easy";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_play);
+
+        difficulty = getIntent().getStringExtra(MainActivity.DIFFICULTY);
         start(null);
     }
 
@@ -49,6 +55,7 @@ public class PlayActivity extends Activity implements PlayFragment.CounterListen
         playFragment = new PlayFragment();
         if (view != null) {
             playFragment.setShouldStart(true);
+            playFragment.setSpeed(getSpeed(difficulty));
         }
         counter = 0;
         FragmentTransaction tx = getFragmentManager().beginTransaction();
@@ -77,5 +84,16 @@ public class PlayActivity extends Activity implements PlayFragment.CounterListen
         counter++;
         TextView textView = (TextView) findViewById(R.id.counter);
         textView.setText(counter + "");
+    }
+
+    private Speed getSpeed(String difficulty) {
+        switch (difficulty) {
+            case EASY:
+                return Speed.SLOW;
+            case DIFFICULT:
+                return Speed.FAST;
+            default:
+                return Speed.NORMAL;
+        }
     }
 }

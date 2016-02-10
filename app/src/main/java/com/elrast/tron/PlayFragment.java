@@ -13,6 +13,7 @@ import android.widget.GridView;
 import android.widget.Toast;
 
 import com.elrast.tron.enums.Direction;
+import com.elrast.tron.enums.Speed;
 import com.elrast.tron.exceptions.CollisionException;
 
 import java.util.List;
@@ -31,7 +32,7 @@ public class PlayFragment extends Fragment {
     private ImageAdapter imageAdapter;
     private boolean collision;
     private boolean shouldStart;
-    private long delay = 1000;
+    private Speed speed = Speed.SLOW;
     private Direction direction = Direction.UP;
     private CounterListener counterListener;
 
@@ -110,11 +111,16 @@ public class PlayFragment extends Fragment {
                 if (collision) {
                     return;
                 }
-                gridView.postDelayed(this, delay);
+                gridView.postDelayed(this, speed.getTimeInterval());
             }
 
         });
 
+    }
+
+    @Override
+    public Context getContext() {
+        return super.getContext();
     }
 
     public Direction getDirection() {
@@ -132,10 +138,10 @@ public class PlayFragment extends Fragment {
     public void setCounterListener(CounterListener counterListener) {
         this.counterListener = counterListener;
     }
-
-    public void setDelay(long delay) {
-        this.delay = delay;
+    public void setSpeed(Speed speed) {
+        this.speed = speed;
     }
+
 
 
 
