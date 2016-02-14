@@ -10,9 +10,14 @@
     <string name="play">Play</string>
     <string name="Settings">settings</string>
     <string name="difficulty">Difficulty:</string>
+    <string name="clear">Clear Data</string>
+    <string name="history">HISTORY</string>
+    <string name="level">Level</string>
+    <string name="score">Score</string>
+    <string name="status">Status</string>
     <string-array name="difficulty_levels">
         <item>Easy</item>
-        <item>Medium</item>
+        <item>Normal</item>
         <item>Difficult</item>
     </string-array>
 </resources>

@@ -2,7 +2,9 @@ package com.elrast.tron;
 
 
 import android.app.Fragment;
+import android.content.ContentValues;
 import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -11,8 +13,9 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.Toast;
-
+import com.elrast.tron.database.TronDatabaseHelper;
 import com.elrast.tron.enums.Direction;
+import com.elrast.tron.enums.Level;
 import com.elrast.tron.enums.Speed;
 import com.elrast.tron.exceptions.CollisionException;
 
@@ -24,7 +27,7 @@ import java.util.List;
  */
 public class PlayFragment extends Fragment {
     interface CounterListener {
-        public void increment();
+        int increment();
     }
 
     Context context;
@@ -35,6 +38,11 @@ public class PlayFragment extends Fragment {
     private Speed speed = Speed.SLOW;
     private Direction direction = Direction.UP;
     private CounterListener counterListener;
+    int counter = 0;
+    private final static String SCORE = "SCORE";
+    private final static String LEVEL = "LEVEL";
+    private final static String STATUS = "STATUS";
+    private Level level = Level.FIRST;
 
 
     public PlayFragment() {
@@ -69,9 +77,10 @@ public class PlayFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        this.context = context;
-        if(context instanceof PlayActivity) {
-            setCounterListener((PlayActivity)context);
+        if (context instanceof PlayActivity) {
+//            setCounterListener((PlayActivity)context);
+            this.context = context;
+
 
         }
     }
@@ -96,12 +105,16 @@ public class PlayFragment extends Fragment {
                 if (shouldStart) {
                     try {
                         computerPlayer.move();
-                        humanPlayer.move(direction);
-                        counterListener.increment();
+                       // humanPlayer.move(direction);
+                        if (counterListener != null) {
+                            counter = counterListener.increment();
+                        }
 
                     } catch (CollisionException e) {
-                        Toast toast = Toast.makeText(context, e.getMessage(), Toast.LENGTH_LONG);
+
+                        Toast toast = Toast.makeText(context, counter + "" + e.getStatus(), Toast.LENGTH_LONG);
                         toast.show();
+                        saveHistory(e.getStatus());
                         collision = true;
                     }
                 }
@@ -117,6 +130,18 @@ public class PlayFragment extends Fragment {
         });
 
     }
+
+    public void saveHistory(String status) {
+
+        TronDatabaseHelper tronDatabaseHelper = new TronDatabaseHelper(this.context);
+        SQLiteDatabase db = tronDatabaseHelper.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(SCORE, counter);
+        contentValues.put(LEVEL, level.getLevelNumber());
+        contentValues.put(STATUS, status);
+        db.insert("HISTORY", null, contentValues);
+    }
+
 
     @Override
     public Context getContext() {
@@ -138,11 +163,10 @@ public class PlayFragment extends Fragment {
     public void setCounterListener(CounterListener counterListener) {
         this.counterListener = counterListener;
     }
+
     public void setSpeed(Speed speed) {
         this.speed = speed;
     }
-
-
 
 
 }

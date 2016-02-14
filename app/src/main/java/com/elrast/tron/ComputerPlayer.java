@@ -34,7 +34,7 @@ public class ComputerPlayer {
 
             } catch (CollisionException e) {
                 this.pixelList.set(headPosition, PixelColor.YELLOW.getStatus());
-                throw new CollisionException(".....","");
+                throw new CollisionException("Computer Lost", "", "WON");
             }
         }
     }
@@ -78,33 +78,43 @@ public class ComputerPlayer {
         List<Integer> lowPriorityMovements = new ArrayList<>();
         for (Integer way : possibleWays) {
             List<Integer> pWays = move(way);
-            switch (pWays.size()) {
-                case 1:
-                    lowPriorityMovements.add(way);
-                    break;
-                case 2:
-                    fairPriorityMovements.add(way);
-                    break;
-                case 3:
-                    highPriorityMovements.add(way);
-                    break;
-                default:
-                    Log.e("size", pWays.size() + ">" + possibleWays.size());
-                    break;
+            for (Integer way2 : pWays) {
+                List<Integer> pWays2 = move(way2);
+                for (Integer way3 : pWays2) {
+                    List<Integer> pWays3 = move(way3);
+                    switch (pWays3.size()) {
+                        case 2:
+                            lowPriorityMovements.add(way);
+                            break;
+                        case 3:
+                            fairPriorityMovements.add(way);
+                            break;
+                        case 4:
+                            highPriorityMovements.add(way);
+                            break;
+                        default:
+                            Log.e("size", pWays.size() + ">" + possibleWays.size());
+                            break;
+                    }
+                }
+
             }
+
         }
         if (highPriorityMovements.size() > 0) {
+
             return highPriorityMovements.get(new Random().nextInt(highPriorityMovements.size()));
         } else if (fairPriorityMovements.size() > 0) {
             return fairPriorityMovements.get(new Random().nextInt(fairPriorityMovements.size()));
         } else if (lowPriorityMovements.size() > 0) {
             return lowPriorityMovements.get(new Random().nextInt(lowPriorityMovements.size()));
         } else {
-            if(possibleWays.isEmpty()){
-                throw new CollisionException("","");
-            }else{
-               return possibleWays.get(0);
+            if (possibleWays.isEmpty()) {
+                throw new CollisionException("Computer Lost", "", "WON");
+            } else {
+                return possibleWays.get(0);
             }
         }
     }
+
 }

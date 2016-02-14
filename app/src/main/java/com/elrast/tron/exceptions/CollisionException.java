@@ -5,12 +5,17 @@ package com.elrast.tron.exceptions;
  */
 public class CollisionException extends Exception{
 
-    public CollisionException(String reason, String statement) {
+    private String status;
+    public CollisionException(String reason, String statement, String status) {
         super(reason + " : " + statement);
+        this.status = status;
     }
     public CollisionException(String reason, String statement, Throwable cause) {
         super(reason + " : " + statement, cause);
 
+    }
+    public String getStatus() {
+        return this.status;
     }
 
 }

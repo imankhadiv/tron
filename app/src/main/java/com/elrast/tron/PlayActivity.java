@@ -2,12 +2,15 @@ package com.elrast.tron;
 
 import android.app.Activity;
 import android.app.FragmentTransaction;
+import android.content.ContentValues;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.elrast.tron.database.TronDatabaseHelper;
 import com.elrast.tron.enums.Direction;
 import com.elrast.tron.enums.Speed;
 
@@ -56,6 +59,7 @@ public class PlayActivity extends Activity implements PlayFragment.CounterListen
         if (view != null) {
             playFragment.setShouldStart(true);
             playFragment.setSpeed(getSpeed(difficulty));
+            playFragment.setCounterListener(this);
         }
         counter = 0;
         FragmentTransaction tx = getFragmentManager().beginTransaction();
@@ -80,10 +84,11 @@ public class PlayActivity extends Activity implements PlayFragment.CounterListen
     }
 
     @Override
-    public void increment() {
+    public int increment() {
         counter++;
         TextView textView = (TextView) findViewById(R.id.counter);
         textView.setText(counter + "");
+        return counter;
     }
 
     private Speed getSpeed(String difficulty) {
@@ -96,4 +101,6 @@ public class PlayActivity extends Activity implements PlayFragment.CounterListen
                 return Speed.NORMAL;
         }
     }
+
+
 }

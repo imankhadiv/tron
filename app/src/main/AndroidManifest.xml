@@ -10,24 +10,27 @@
         android:theme="@style/MaterialTheme" >
         <activity
             android:name=".PlayActivity"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name=".MainActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/MaterialTheme">
+            android:theme="@style/MaterialTheme" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".SettingsActivity"
-            android:label="Settings" android:parentActivityName=".MainActivity"
-            >
+        <activity
+            android:name=".SettingsActivity"
+            android:label="Settings"
+            android:parentActivityName=".MainActivity" >
             <meta-data
-                android:name = "android.support.PARENT_ACTIVITY"
-                android:value=".MainActivity"/>
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity" />
+        </activity>
+        <activity android:name=".HistoryActivity" >
         </activity>
     </application>
 

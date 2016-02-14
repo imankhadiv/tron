@@ -8,32 +8,28 @@
     >
 
     <include layout="@layout/toolbar" android:id="@+id/toolbar"/>
-    <GridLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingLeft="50dp"
-        android:paddingRight="20dp"
-        android:paddingTop="20dp"
-        android:columnCount="2">
-
+        android:layout_height="match_parent"
+        >
         <TextView android:layout_height="wrap_content"
+            android:id="@+id/difficulty_text"
             android:layout_width="wrap_content"
             android:text="@string/difficulty"
-            android:gravity="center_horizontal"
-            android:layout_gravity="fill_horizontal"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@+id/difficulty_spinner"
             android:textAppearance="?android:attr/textAppearanceLarge"
             />
         <Spinner
             android:id="@+id/difficulty_spinner"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-
             android:entries="@array/difficulty_levels"
-            />
+            android:layout_centerInParent="true"
+            android:layout_marginLeft="10dp"
+             />
 
-
-
-    </GridLayout>
+    </RelativeLayout>
 
 
 

@@ -1,7 +1,6 @@
 package com.elrast.tron;
 
 import com.elrast.tron.enums.PixelColor;
-
 import java.util.ArrayList;
 import java.util.List;
 

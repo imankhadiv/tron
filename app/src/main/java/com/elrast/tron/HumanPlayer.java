@@ -6,9 +6,6 @@ import com.elrast.tron.exceptions.CollisionException;
 
 import java.util.List;
 
-/**
- * Created by Iman on 05/02/16.
- */
 public class HumanPlayer {
 
     private List<Integer> pixelList;
@@ -37,7 +34,7 @@ public class HumanPlayer {
         }
         if (pixelList.get(headPosition) != PixelColor.BLUE.getStatus()) {
             pixelList.set(headPosition, PixelColor.YELLOW.getStatus());
-            throw new CollisionException("Collision Exception Occurred: ", "Human Player Lost");
+            throw new CollisionException("Collision Exception Occurred: ", "Human Player Lost","LOST");
         }
         pixelList.set(headPosition, PixelColor.GREEN.getStatus());
     }
